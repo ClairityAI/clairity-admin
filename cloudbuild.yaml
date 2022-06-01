@@ -1,0 +1,12 @@
+steps:
+  - name: 'node:16'
+    args: ['yarn', 'install']
+  - name: 'node:16'
+    dir: 'functions'
+    args: ['yarn', 'install']
+  - name: 'node:16'
+    args: ['yarn', 'build']
+  - name: 'gcr.io/$PROJECT_ID/firebase'
+    args:
+      - deploy
+      - --project=$PROJECT_ID
