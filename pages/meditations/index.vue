@@ -10,7 +10,7 @@
                 <ul>
                     <v-li v-for="(item, index) in possibleMeditations" :key="item.id" class="flex-col">
                         <v-btn @click="toggleMeditation(item.id)">
-                            {{ item.name }}
+                            <span style="display:inline-flex;flex-direction:row;column-gap: 10px;"><img v-if="item.icon.length" :src="item.icon" style="width:10px"  />{{ item.name }}</span>
                         </v-btn>
                       
                         <v-card v-if="item.isOpen">
@@ -34,6 +34,12 @@
                         </v-btn>
                         <v-btn @click="deleteMeditation(item.id)">
                 Delete Meditation
+                        </v-btn>
+                        <v-btn @click="duplicateMeditation(item)">
+                Duplicate Meditation
+                        </v-btn>
+                        <v-btn @click="copyJSON(item)">
+                Copy JSON
                         </v-btn>
                         </v-card>
 </v-li>
@@ -185,6 +191,16 @@
         this.$toast.global.user_info(`Meditation created: ${thoughtData.name}`)
         window.location.reload()
       },
+      async duplicateMeditation(item) {
+        const obj = item;
+        delete obj.id;
+        const response = await this.$axios.post(`/v1/meditations`, {
+            ...obj
+        })
+        const thoughtData = response.data
+        this.$toast.global.user_info(`Meditation created: ${thoughtData.name}`)
+        window.location.reload()
+      },
       async deleteMeditation(id){
         const confirm = window.confirm('Are you sure you want to delete this meditation?')
         if (!confirm) return this.$toast.global.user_info(`Meditation not deleted`)
@@ -199,7 +215,18 @@
             const meditation = {...this.ogMeditations.find(x => x.id === id), isOpen: true}
             const currentMeditation = this.possibleMeditations.find(x => x.id === id)
             Object.assign(currentMeditation, meditation)
-        }
+        },
+        copyJSON(item){
+            const obj = item;
+            delete obj.id;
+            const el = document.createElement('textarea');
+            el.value = JSON.stringify(obj, null, 2);
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            this.$toast.global.user_info(`Meditation copied to clipboard`)
+        },
     },
   }
   </script>
