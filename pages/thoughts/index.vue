@@ -10,7 +10,7 @@
 <script>
 export default {
   async asyncData({ store }) {
-    const thoughtsResponse = await store.$axios.get('/v1/thoughts', {
+    const thoughtsResponse = await store.$axios.post('/v1/thoughts/list', {
       params: {
         order_by: 'created_at',
         limit: 10,
