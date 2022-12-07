@@ -1,6 +1,5 @@
 # clairity-admin
 
-
 ## Build Setup
 
 ```bash

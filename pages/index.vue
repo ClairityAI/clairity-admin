@@ -19,21 +19,37 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12">
-              <v-select
-                v-model="distortions"
-                outlined
-                multiple
-                chips
-                label="Distortions"
-                :items="possibleDistortions"
-                item-text="title"
-                item-value="title"
-                required
-                :errors="distortionErrors"
-                :rules="distortionRules"
-              ></v-select>
-            </v-col>
+            <v-card class="mx-auto" max-width="500" style="margin-top: -30px">
+              <!-- <v-divider v-if="!allSelected"></v-divider> -->
+              <v-row class="mb-6" no-gutters>
+                <v-col
+                  v-for="n in possibleDistortions"
+                  :key="n.id"
+                  :disabled="loading"
+                  @click="handlePush(n)"
+                >
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-card
+                        class="pa-2 ma-2"
+                        tile
+                        v-bind="attrs"
+                        outlined
+                        style="cursor: pointer; border-radius: 10px"
+                        :color="distortions.includes(n) ? 'blue' : 'lightgray'"
+                        v-on="on"
+                      >
+                        {{ n.title }}
+                        <v-span style="font-weight: 200; opacity: 0.6">{{
+                          distortionCount[n.title]
+                        }}</v-span>
+                      </v-card>
+                    </template>
+                    <span class="mw-50%">{{ n.description }}</span>
+                  </v-tooltip>
+                </v-col>
+              </v-row>
+            </v-card>
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -64,9 +80,18 @@ export default {
         limit: 100,
       },
     })
+    const distortionCount = await store.$axios.get(
+      '/v1/distortions/count_by_title',
+      {
+        params: {
+          type: 'admin',
+        },
+      }
+    )
 
     return {
       possibleDistortions: distortionResponse.data,
+      distortionCount: distortionCount.data,
     }
   },
 
@@ -83,6 +108,7 @@ export default {
         (v) => v.length > 20 || 'Text must be at least 20 characters.',
       ],
       distortionRules: [(v) => v.length !== 0 || 'Distortions are required.'],
+      distortionCount: {},
     }
   },
 
@@ -108,6 +134,13 @@ export default {
       this.text = ''
       this.distortions = []
       this.$refs.createThoughtForm.resetValidation()
+    },
+    handlePush(n) {
+      if (this.distortions.includes(n)) {
+        this.distortions = this.distortions.filter((item) => item !== n)
+      } else {
+        this.distortions.push(n)
+      }
     },
   },
 }
