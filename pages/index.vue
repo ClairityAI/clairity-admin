@@ -136,10 +136,10 @@ export default {
       this.$refs.createThoughtForm.resetValidation()
     },
     handlePush(n) {
-      if (this.distortions.includes(n)) {
-        this.distortions = this.distortions.filter((item) => item !== n)
+      if (this.distortions.includes(n.title)) {
+        this.distortions = this.distortions.filter((item) => item !== n.title)
       } else {
-        this.distortions.push(n)
+        this.distortions.push(n.title)
       }
     },
   },
