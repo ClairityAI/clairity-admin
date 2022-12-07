@@ -36,7 +36,7 @@
                         v-bind="attrs"
                         outlined
                         style="cursor: pointer; border-radius: 10px"
-                        :color="distortions.includes(n) ? 'blue' : 'lightgray'"
+                        :color="distortions.includes(n.title) ? 'blue' : 'lightgray'"
                         v-on="on"
                       >
                         {{ n.title }}
