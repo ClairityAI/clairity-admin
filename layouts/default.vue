@@ -76,6 +76,11 @@ export default {
           title: 'My Thoughts',
           to: '/thoughts',
         },
+        {
+          icon: 'mdi-meditation',
+          title: 'Meditations',
+          to: '/meditations',
+        },
       ],
       miniVariant: false,
       right: true,

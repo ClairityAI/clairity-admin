@@ -15,6 +15,11 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src: '//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js',
+      },
+    ],
   },
 
   target: 'static',
